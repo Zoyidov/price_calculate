@@ -81,6 +81,9 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
                   calculatedCost = null;
                 });
               },
+              onSubmitted: (value){
+                calculateChargingCost();
+              },
             ),
             const SizedBox(height: 20),
             SizedBox(
@@ -98,9 +101,11 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
             ),
             const SizedBox(height: 20),
             if (calculatedCost != null)
-              Text(
-                'Deopozid bilan:    ${formatCost(calculatedCost!+additionalAmount)} SUM',
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              Center(
+                child: Text(
+                  'Deopozid bilan:    ${formatCost(calculatedCost!+additionalAmount)} SUM',
+                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
           ],
         ),

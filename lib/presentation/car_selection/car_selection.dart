@@ -3,7 +3,7 @@ import 'package:price_calculate/model/model.dart';
 import 'package:price_calculate/presentation/model_selection/model_selection.dart';
 
 class CarSelectionScreen extends StatelessWidget {
-  final List<String> brands = ['BYD', 'Tesla', 'BMW', 'Mercedes', 'Zeekr', 'Chery'];
+  final List<String> brands = ['BYD', 'Tesla', 'BMW', 'Mercedes', 'Zeekr', 'Cherry'];
 
   final Map<String, List<Car>> carModels = {
     'BYD': [
@@ -51,28 +51,28 @@ class CarSelectionScreen extends StatelessWidget {
     'Zeekr': [
       Car('Zeekr', '001', 86.0),
     ],
-    'Chery': [
-      Car('Chery', 'eQ1', 30.0),
-      Car('Chery', 'eQ2', 30.0),
-      Car('Chery', 'eQ3', 38.0),
+    'Cherry': [
+      Car('Cherry', 'eQ1', 30.0),
+      Car('Cherry', 'eQ2', 30.0),
+      Car('Cherry', 'eQ3', 38.0),
     ],
-    'Nissan': [
-      Car('Nissan', 'Leaf', 40.0),
-      Car('Nissan', 'Ariya', 87.0),
-    ],
-    'Hyundai': [
-      Car('Hyundai', 'Ioniq 5', 72.6),
-      Car('Hyundai', 'Kona Electric', 64.0),
-    ],
+    // 'Nissan': [
+    //   Car('Nissan', 'Leaf', 40.0),
+    //   Car('Nissan', 'Ariya', 87.0),
+    // ],
+    // 'Hyundai': [
+    //   Car('Hyundai', 'Ioniq 5', 72.6),
+    //   Car('Hyundai', 'Kona Electric', 64.0),
+    // ],
   };
 
   final Map<String, String> brandImages = {
-    'BYD': 'https://i.pinimg.com/originals/44/16/34/44163457c6d0769dc559e9ed09709eb6.png',
-    'Tesla': 'https://img.icons8.com/ios11/200/tesla-logo.png',
-    'BMW': 'https://pngimg.com/uploads/bmw_logo/bmw_logo_PNG19707.png',
-    'Mercedes': 'https://logodownload.org/wp-content/uploads/2014/04/mercedes-benz-logo-8.png',
-    'Zeekr': 'https://www.carlogos.org/car-logos/zeekr-logo.png',
-    'Chery': 'https://www.carlogos.org/logo/Chery-logo-2013-3840x2160.png',
+    'BYD': 'assets/images/byd.png',
+    'Tesla': 'assets/images/tesla.png',
+    'BMW': 'assets/images/bmw.png',
+    'Mercedes': 'assets/images/merc.png',
+    'Zeekr': 'assets/images/zeekr.png',
+    'Cherry': 'assets/images/cherry.png',
   };
 
 
@@ -88,7 +88,7 @@ class CarSelectionScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ListTile(
             leading: brandImages[brands[index]] != null
-                ? Image.network(brandImages[brands[index]]!,height: 60,width: 60,)
+                ? Image.asset(brandImages[brands[index]]!,height: 60,width: 60,)
                 : null,
             title: Text(
               brands[index],
