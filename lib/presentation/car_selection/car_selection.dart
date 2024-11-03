@@ -168,38 +168,41 @@ class CarSelectionScreen extends StatelessWidget {
               ],
             ),
           ),
-          ListView.separated(
-            shrinkWrap: true,
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: brands.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                leading: brandImages[brands[index]] != null
-                    ? Image.asset(
-                        brandImages[brands[index]]!,
-                        height: 60,
-                        width: 60,
-                      )
-                    : null,
-                title: Text(
-                  brands[index],
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                onTap: () {
-                  if (carModels[brands[index]]!.isNotEmpty) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ModelSelectionScreen(
-                          brand: brands[index],
-                          models: carModels[brands[index]]!,
+          Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              // physics: const NeverScrollableScrollPhysics(),
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: brands.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  leading: brandImages[brands[index]] != null
+                      ? Image.asset(
+                          brandImages[brands[index]]!,
+                          height: 60,
+                          width: 60,
+                        )
+                      : null,
+                  title: Text(
+                    brands[index],
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    if (carModels[brands[index]]!.isNotEmpty) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ModelSelectionScreen(
+                            brand: brands[index],
+                            models: carModels[brands[index]]!,
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                },
-              );
-            },
+                      );
+                    }
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),
