@@ -15,7 +15,7 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
   double currentCharge = 0.0;
   double electricityRate = 0.0;
   double? calculatedCost;
-  final double additionalAmount = 10000.0; // Fixed additional amount
+  final double additionalAmount = 10000.0;
 
   void calculateChargingCost() {
     if (electricityRate <= 0) return;
@@ -31,6 +31,20 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
     if (cost == null) return '0.00';
     final formatter = NumberFormat('#,##0.00');
     return formatter.format(cost);
+  }
+
+  Color getSliderColor() {
+    if (currentCharge <= 20) {
+      return Colors.red;
+    } else if (currentCharge <= 40) {
+      return Colors.yellow;
+    } else {
+      return Colors.cyan;
+    }
+  }
+
+  Color getButtonColor() {
+    return currentCharge <= 20 ? Colors.red : Colors.cyan;
   }
 
   @override
@@ -52,6 +66,7 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Slider(
+              activeColor: getSliderColor(),
               value: currentCharge,
               min: 0,
               max: 100,
@@ -81,7 +96,7 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
                   calculatedCost = null;
                 });
               },
-              onSubmitted: (value){
+              onSubmitted: (value) {
                 calculateChargingCost();
               },
             ),
@@ -90,20 +105,24 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.cyan,
+                  foregroundColor: Colors.white,
+                  backgroundColor: getButtonColor(),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                onPressed: calculateChargingCost,
-                child: const Text('Hissoblash',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                onPressed: electricityRate > 0 ? calculateChargingCost : null, // Disable button if electricityRate is <= 0
+                child: const Text(
+                  'Hissoblash',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
             ),
             const SizedBox(height: 20),
             if (calculatedCost != null)
               Center(
                 child: Text(
-                  'Deopozid bilan:    ${formatCost(calculatedCost!+additionalAmount)} SUM',
+                  'Deopozid bilan:    ${formatCost(calculatedCost)} SO\'M',
                   style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),

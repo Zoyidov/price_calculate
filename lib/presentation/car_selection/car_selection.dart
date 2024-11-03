@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:price_calculate/model/model.dart';
+import 'package:price_calculate/presentation/byd_calculator_screen/byd_calculator_screen.dart';
 import 'package:price_calculate/presentation/model_selection/model_selection.dart';
 
 class CarSelectionScreen extends StatelessWidget {
@@ -75,40 +76,132 @@ class CarSelectionScreen extends StatelessWidget {
     'Cherry': 'assets/images/cherry.png',
   };
 
-
   CarSelectionScreen({super.key});
+
+  final TextEditingController kWhController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
+    double? kWh = double.tryParse(kWhController.text);
     return Scaffold(
-      appBar: AppBar(title: const Text('Mashina Modelini Tanlang')),
-      body: ListView.separated(
-        separatorBuilder: (context, index) => const Divider(),
-        itemCount: brands.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            leading: brandImages[brands[index]] != null
-                ? Image.asset(brandImages[brands[index]]!,height: 60,width: 60,)
-                : null,
-            title: Text(
-              brands[index],
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            onTap: () {
-              if (carModels[brands[index]]!.isNotEmpty) {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ModelSelectionScreen(
-                      brand: brands[index],
-                      models: carModels[brands[index]]!,
+      appBar: AppBar(
+        title: const Text(
+          'Mashina Modelini Tanlang',
+        ),
+          leading:  Image.asset(
+          'assets/images/logo.png',
+          height: 60,
+          width: 60,
+        ),
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: kWhController,
+                    decoration: const InputDecoration(
+                      labelText: 'Enter kWh',
+                      border: OutlineInputBorder(),
                     ),
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (value) {
+                      kWh = double.tryParse(value);
+                      if (kWh != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BydCalculatorScreen(
+                              model: "MegaWatt",
+                              capacity: kWh!,
+                            ),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                              content: Text(
+                                'kWh hajmini kiriting',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                              ),
+                              backgroundColor: Colors.red),
+                        );
+                      }
+                    },
                   ),
-                );
-              }
+                ),
+                const SizedBox(
+                  width: 20),
+                FloatingActionButton(
+                  backgroundColor: const Color(0xFF06b8b3),
+                  onPressed: () {
+                    kWh = double.tryParse(kWhController.text);
+                    if (kWh != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BydCalculatorScreen(
+                            model: "MegaWatt",
+                            capacity: kWh!,
+                          ),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text(
+                              'kWh hajmini kiriting',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            backgroundColor: Colors.red),
+                      );
+                    }
+                  },
+                  child: const Icon(Icons.calculate_outlined),
+                ),
+              ],
+            ),
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            separatorBuilder: (context, index) => const Divider(),
+            itemCount: brands.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: brandImages[brands[index]] != null
+                    ? Image.asset(
+                        brandImages[brands[index]]!,
+                        height: 60,
+                        width: 60,
+                      )
+                    : null,
+                title: Text(
+                  brands[index],
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                onTap: () {
+                  if (carModels[brands[index]]!.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ModelSelectionScreen(
+                          brand: brands[index],
+                          models: carModels[brands[index]]!,
+                        ),
+                      ),
+                    );
+                  }
+                },
+              );
             },
-          );
-        },
+          ),
+        ],
       ),
     );
   }

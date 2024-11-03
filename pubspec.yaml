@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl:
+  firebase_core:
 
 dev_dependencies:
   flutter_test:

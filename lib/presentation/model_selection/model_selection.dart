@@ -14,8 +14,35 @@ class ModelSelectionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double? kWh = double.tryParse(kWhController.text);
     return Scaffold(
-      appBar: AppBar(
-          title: Text('$brand - Markasini Tanlang')),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFF06b8b3),
+        onPressed: () {
+          kWh = double.tryParse(kWhController.text);
+          if (kWh != null) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BydCalculatorScreen(
+                  model: brand,
+                  capacity: kWh!,
+                ),
+              ),
+            );
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text(
+                    'kWh hajmini kiriting',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  backgroundColor: Colors.red),
+            );
+          }
+        },
+        child: const Icon(Icons.calculate_outlined),
+      ),
+      appBar: AppBar(title: Text('$brand - Markasini Tanlang')),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -28,7 +55,7 @@ class ModelSelectionScreen extends StatelessWidget {
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,
-                onSubmitted: (value){
+                onSubmitted: (value) {
                   kWh = double.tryParse(value);
                   if (kWh != null) {
                     Navigator.push(
@@ -42,7 +69,13 @@ class ModelSelectionScreen extends StatelessWidget {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('kWh hajmini kiriting', textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),), backgroundColor: Colors.red),
+                      const SnackBar(
+                          content: Text(
+                            'kWh hajmini kiriting',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          backgroundColor: Colors.red),
                     );
                   }
                 },
