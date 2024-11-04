@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:intl/intl.dart';
 
 class BydCalculatorScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class BydCalculatorScreen extends StatefulWidget {
 
 class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
   double currentCharge = 0.0;
+  double targetCharge = 100.0;
   double electricityRate = 0.0;
   double? calculatedCost;
   final double additionalAmount = 10000.0;
@@ -20,10 +22,9 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
   void calculateChargingCost() {
     if (electricityRate <= 0) return;
 
-    double remainingCapacity = widget.capacity * (1 - currentCharge / 100);
+    double chargeNeeded = widget.capacity * ((targetCharge - currentCharge) / 100);
     setState(() {
-      // Add the fixed amount to the calculated cost
-      calculatedCost = remainingCapacity * electricityRate + additionalAmount;
+      calculatedCost = chargeNeeded * electricityRate + additionalAmount;
     });
   }
 
@@ -33,10 +34,10 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
     return formatter.format(cost);
   }
 
-  Color getSliderColor() {
-    if (currentCharge <= 20) {
+  Color getSliderColor(double value) {
+    if (value <= 20) {
       return Colors.red;
-    } else if (currentCharge <= 40) {
+    } else if (value <= 40) {
       return Colors.yellow;
     } else {
       return Colors.cyan;
@@ -62,19 +63,48 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Mashinaning qolgan zaryadi (${currentCharge.round()}%):',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              'Mashinaning zaryad darajasi (${currentCharge.round()}% - ${targetCharge.round()}%):',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-            Slider(
-              activeColor: getSliderColor(),
-              value: currentCharge,
-              min: 0,
+            FlutterSlider(
+              values: [currentCharge, targetCharge],
               max: 100,
-              divisions: 100,
-              label: '${currentCharge.round()}%',
-              onChanged: (value) {
+              min: 0,
+              rangeSlider: true,
+              handlerHeight: 30,
+              handlerWidth: 30,
+              trackBar: FlutterSliderTrackBar(
+                inactiveTrackBar: BoxDecoration(color: Colors.grey[300]),
+                activeTrackBar: BoxDecoration(color: getSliderColor(currentCharge)),
+              ),
+              handler: FlutterSliderHandler(
+                decoration: const BoxDecoration(),
+                child: Material(
+                  type: MaterialType.circle,
+                  color: getSliderColor(currentCharge),
+                  elevation: 3,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Icon(Icons.circle, size: 20, color: Colors.white),
+                  ),
+                ),
+              ),
+              rightHandler: FlutterSliderHandler(
+                decoration: const BoxDecoration(),
+                child: Material(
+                  type: MaterialType.circle,
+                  color: getSliderColor(targetCharge),
+                  elevation: 3,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    child: const Icon(Icons.circle, size: 20, color: Colors.white),
+                  ),
+                ),
+              ),
+              onDragging: (handlerIndex, lowerValue, upperValue) {
                 setState(() {
-                  currentCharge = value;
+                  currentCharge = lowerValue;
+                  targetCharge = upperValue;
                   calculatedCost = null;
                 });
               },
@@ -111,7 +141,7 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                onPressed: electricityRate > 0 ? calculateChargingCost : null, // Disable button if electricityRate is <= 0
+                onPressed: electricityRate > 0 ? calculateChargingCost : null,
                 child: const Text(
                   'Hissoblash',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
