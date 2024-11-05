@@ -11,6 +11,9 @@ dependencies:
     sdk: flutter
   intl:
   firebase_core:
+  cloud_firestore:
+  cached_network_image:
+  zoom_tap_animation:
   flutter_xlider:
 
 dev_dependencies:

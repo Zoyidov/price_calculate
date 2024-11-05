@@ -117,7 +117,7 @@ class _BydCalculatorScreenState extends State<BydCalculatorScreen> {
             TextField(
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                hintText: 'Enter rate in Sum',
+                hintText: 'kWh narxini kiriting',
                 border: OutlineInputBorder(),
               ),
               onChanged: (value) {

@@ -51,7 +51,7 @@ class ModelSelectionScreen extends StatelessWidget {
               child: TextField(
                 controller: kWhController,
                 decoration: const InputDecoration(
-                  labelText: 'Enter kWh',
+                  labelText: 'kWh ni kiriting',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.number,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:price_calculate/model/model.dart';
 import 'package:price_calculate/presentation/byd_calculator_screen/byd_calculator_screen.dart';
 import 'package:price_calculate/presentation/model_selection/model_selection.dart';
+import 'package:price_calculate/presentation/some_data/some_data.dart';
 
 class CarSelectionScreen extends StatelessWidget {
   final List<String> brands = ['BYD', 'Tesla', 'BMW', 'Mercedes', 'Zeekr', 'Cherry'];
@@ -89,11 +90,16 @@ class CarSelectionScreen extends StatelessWidget {
         title: const Text(
           'Mashina Modelini Tanlang',
         ),
-          leading:  Image.asset(
-          'assets/images/logo.png',
-          height: 60,
-          width: 60,
-        ),
+          leading:  GestureDetector(
+            onDoubleTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) =>  SomeData()));
+            },
+            child: Image.asset(
+            'assets/images/logo.png',
+            height: 60,
+            width: 60,
+                    ),
+          ),
       ),
       body: Column(
         children: [
@@ -105,7 +111,7 @@ class CarSelectionScreen extends StatelessWidget {
                   child: TextField(
                     controller: kWhController,
                     decoration: const InputDecoration(
-                      labelText: 'Enter kWh',
+                      labelText: 'kWh ni kiriting',
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,

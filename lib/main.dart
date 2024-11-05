@@ -34,6 +34,7 @@ class MainApp extends StatelessWidget {
       ),
       scaffoldBackgroundColor: Colors.white,
       appBarTheme: const AppBarTheme(
+        centerTitle: true,
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -65,6 +66,7 @@ class MainApp extends StatelessWidget {
       ),
       scaffoldBackgroundColor: Colors.black,
       appBarTheme: const AppBarTheme(
+        centerTitle: true,
         backgroundColor: Colors.black,
         elevation: 0,
         scrolledUnderElevation: 0,
