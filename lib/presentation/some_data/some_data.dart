@@ -258,7 +258,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
         child: ListView.builder(
           itemCount: _categoryDetails.length,
           itemBuilder: (context, index) {
-            return InkWell(
+            return _categoryDetails[index].isNotEmpty ? InkWell(
               borderRadius: BorderRadius.circular(12),
               onTap: () {
                 // Edit functionality
@@ -337,6 +337,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   ),
                 ),
               ),
+            ): Center(
+              child: Text(
+                'No data available',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),),
             );
           },
         ),
