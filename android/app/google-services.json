@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "852254169402",
+    "project_id": "megawattkwh",
+    "storage_bucket": "megawattkwh.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:852254169402:android:71bca253b29eda93ba5803",
+        "android_client_info": {
+          "package_name": "com.example.price_calculate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZQ-n7m0f-qDZGwSH0LqUQ3V9xrYBvs3I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
