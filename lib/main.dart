@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:price_calculate/firebase_options.dart';
-import 'package:price_calculate/presentation/some_data/some_data.dart';
 import 'package:price_calculate/presentation/splash/splash.dart';
 
 void main() async {
@@ -22,7 +21,7 @@ class MainApp extends StatelessWidget {
       theme: _lightTheme,
       darkTheme: _darkTheme,
       themeMode: ThemeMode.system,
-      home: SomeData(),
+      home: const SplashScreen(),
     );
   }
 
