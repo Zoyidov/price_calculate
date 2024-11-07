@@ -140,7 +140,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           });
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setStringList(widget.category.name, fetchedDetails); // Save to SharedPreferences
+          prefs.setStringList(widget.category.name, fetchedDetails);
         }
       }
     } catch (e) {
