@@ -15,6 +15,7 @@ dependencies:
   cached_network_image:
   zoom_tap_animation:
   flutter_xlider:
+  shared_preferences:
 
 dev_dependencies:
   flutter_test:
