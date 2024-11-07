@@ -16,6 +16,7 @@ dependencies:
   zoom_tap_animation:
   flutter_xlider:
   shared_preferences:
+  shared_preferences_web:
 
 dev_dependencies:
   flutter_test:

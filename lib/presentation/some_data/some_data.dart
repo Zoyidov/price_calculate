@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:shared_preferences_web/shared_preferences_web.dart'; // Import for web
 
 class SomeData extends StatelessWidget {
   final List<Category> categories = [
@@ -12,7 +12,7 @@ class SomeData extends StatelessWidget {
     Category(name: 'Boshqa xizmatlar', details: []),
   ];
 
-  // category icons
+  // Category icons
   final List<IconData> categoryIcons = [
     Icons.contact_mail_sharp,
     Icons.ev_station,
@@ -20,14 +20,13 @@ class SomeData extends StatelessWidget {
     Icons.more
   ];
 
-
   SomeData({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Ma\'lumotlar', style: TextStyle(color: Colors.white)),
+      appBar:  AppBar(
+        title: Text('Ma\'lumotlar', style: TextStyle(color: Colors.white)),
       ),
       body: Center(
         child: LayoutBuilder(
@@ -107,7 +106,15 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   }
 
   Future<void> _loadLocalData() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    SharedPreferences prefs;
+
+    // Handle the initialization of shared_preferences depending on the platform (mobile or web)
+    if (kIsWeb) {
+      prefs = await SharedPreferences.getInstance();
+    } else {
+      prefs = await SharedPreferences.getInstance();
+    }
+
     List<String>? storedData = prefs.getStringList(widget.category.name);
     if (storedData != null) {
       setState(() {
@@ -133,11 +140,11 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           });
 
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.setStringList(widget.category.name, fetchedDetails);
+          prefs.setStringList(widget.category.name, fetchedDetails); // Save to SharedPreferences
         }
       }
     } catch (e) {
-      print('Error fetching data: $e');
+      print('Error fetching data from Firebase: $e');
     }
   }
 
@@ -155,7 +162,6 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           'details': [newData],
         });
       }
-      print('Data uploaded successfully!');
 
       _fetchDataFromFirebase(categoryName);
     } catch (e) {
@@ -163,7 +169,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     }
   }
 
-  void _deleteDataFromFirebase(String categoryName, String dataToDelete) async {
+  Future<void> _deleteDataFromFirebase(String categoryName, String dataToDelete) async {
     try {
       var docRef = FirebaseFirestore.instance.collection('categories').doc(categoryName);
       var docSnapshot = await docRef.get();
@@ -173,14 +179,12 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           'details': FieldValue.arrayRemove([dataToDelete]),
         });
       }
-      print('Data deleted successfully!');
 
       _fetchDataFromFirebase(categoryName);
     } catch (e) {
       print('Error deleting data: $e');
     }
   }
-
 
   Future<void> _updateDataInFirebase(String categoryName, String oldData, String newData) async {
     try {
@@ -195,7 +199,6 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           'details': FieldValue.arrayUnion([newData]),
         });
       }
-      print('Data updated successfully!');
 
       _fetchDataFromFirebase(categoryName);
     } catch (e) {
@@ -207,10 +210,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          widget.category.name,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
+        title: Text(widget.category.name, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
             onPressed: () {
@@ -218,7 +218,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Add New Data'),
+                    title: const Text('Add New Data'),
                     content: TextField(
                       controller: dataController,
                       decoration: const InputDecoration(hintText: 'Enter new data'),
@@ -232,7 +232,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                     actions: [
                       TextButton(
                         onPressed: () => Navigator.pop(context),
-                        child: Text('Cancel'),
+                        child: const Text('Cancel'),
                       ),
                       TextButton(
                         onPressed: () {
@@ -241,7 +241,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                             Navigator.pop(context);
                           }
                         },
-                        child: Text('Add'),
+                        child: const Text('Add'),
                       ),
                     ],
                   );
@@ -256,18 +256,28 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
-          itemCount: _categoryDetails.length,
+          itemCount: _categoryDetails.isEmpty ? 1 : _categoryDetails.length,
           itemBuilder: (context, index) {
-            return _categoryDetails[index].isNotEmpty ? InkWell(
-              borderRadius: BorderRadius.circular(12),
+            if (_categoryDetails.isEmpty) {
+              return  Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SizedBox(height: MediaQuery.of(context).size.height/3.2,),
+                  const CircularProgressIndicator(),
+                ],
+              );
+            }
+
+            return InkWell(
               onTap: () {
-                // Edit functionality
-                dataController.text = _categoryDetails[index]; // Pre-fill the text field with the current data
+                // Edit data
+                dataController.text = _categoryDetails[index];
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Edit Data'),
+                      title: const Text('Edit Data'),
                       content: TextField(
                         controller: dataController,
                         decoration: const InputDecoration(hintText: 'Edit data'),
@@ -281,7 +291,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                           onPressed: () {
@@ -290,7 +300,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                               Navigator.pop(context);
                             }
                           },
-                          child: Text('Save'),
+                          child: const Text('Save'),
                         ),
                       ],
                     );
@@ -302,26 +312,27 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Delete Data'),
-                      content: Text('Are you sure you want to delete this data?'),
+                      title: const Text('Delete Data'),
+                      content: const Text('Are you sure you want to delete this data?'),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text('No'),
+                          child: const Text('No'),
                         ),
                         TextButton(
                           onPressed: () {
                             _deleteDataFromFirebase(widget.category.name, _categoryDetails[index]);
                             Navigator.pop(context);
                           },
-                          child: Text('Yes'),
+                          child: const Text('Yes'),
                         ),
                       ],
                     );
                   },
-                );},
+                );
+              },
               child: Card(
-                margin: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 4.0),
+                margin: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 4.0),
                 elevation: 4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -330,16 +341,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                   padding: const EdgeInsets.all(16.0),
                   child: Text(
                     _categoryDetails[index],
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
-            ): Center(
-              child: Text(
-                'No data available',style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color: Colors.white),),
             );
           },
         ),
@@ -347,4 +352,3 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     );
   }
 }
-
